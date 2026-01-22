@@ -1,0 +1,8 @@
+# Proteger directorio de uploads
+# Permitir acceso solo a archivos específicos
+Options -Indexes
+<FilesMatch "\.(php|phtml|php3|php4|php5|phps|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+

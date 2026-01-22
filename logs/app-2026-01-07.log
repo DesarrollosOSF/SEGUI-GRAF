@@ -1,0 +1,11 @@
+[2026-01-07 22:45:58] [INFO] Login exitoso {"usuario":"admin"}
+[2026-01-07 22:47:53] [INFO] Login exitoso {"usuario":"RecaudoyCartera"}
+[2026-01-07 22:48:09] [INFO] Login exitoso {"usuario":"admin"}
+[2026-01-07 22:48:40] [INFO] Login exitoso {"usuario":"admin"}
+[2026-01-07 22:55:58] [INFO] Login exitoso {"usuario":"RecaudoyCartera"}
+[2026-01-07 22:56:02] [INFO] Login exitoso {"usuario":"admin"}
+[2026-01-07 23:05:28] [INFO] AUDIT: Gestionar solicitud by user_id: 1 {"type":"audit","solicitud_id":"11","accion":"actualizar_estado"}
+[2026-01-07 23:05:28] [INFO] Solicitud actualizada {"solicitud_id":"11","estado_anterior":"Pendiente de aprobaci\u00f3n","estado_nuevo":"Aprobada","usuario":1}
+[2026-01-07 23:05:32] [INFO] Login exitoso {"usuario":"RecaudoyCartera"}
+[2026-01-07 23:06:19] [INFO] Login exitoso {"usuario":"RecaudoyCartera"}
+[2026-01-07 23:06:48] [INFO] Login exitoso {"usuario":"admin"}

@@ -1,0 +1,3 @@
+[2026-01-14 14:20:20] [INFO] Login exitoso {"usuario":"DireccionComercial"}
+[2026-01-14 14:20:25] [INFO] AUDIT: Agregar comentario by user_id: 12 {"type":"audit","solicitud_id":"18","comentario_id":"6"}
+[2026-01-14 14:23:54] [INFO] Login exitoso {"usuario":"admin"}

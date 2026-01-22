@@ -1,0 +1,18 @@
+# Configuración general
+RewriteEngine On
+
+# Proteger archivos sensibles
+<FilesMatch "^(config|includes|database)">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Proteger archivos de configuración
+<FilesMatch "\.(sql|log|ini|conf)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
