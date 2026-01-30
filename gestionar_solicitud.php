@@ -39,9 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $justificacion = sanitize($_POST['justificacion_prioridad'] ?? '');
     $observaciones = sanitize($_POST['observaciones'] ?? '');
     $url_drive = sanitize($_POST['url_drive'] ?? '');
+    $cambiar_fecha_entrega = $_POST['cambiar_fecha_entrega'] ?? '0';
+    $nueva_fecha_estimada_entrega = $_POST['nueva_fecha_estimada_entrega'] ?? '';
 
     if (empty($estado)) {
         $error = 'Debe seleccionar un estado';
+    } elseif ($cambiar_fecha_entrega === '1' && empty($nueva_fecha_estimada_entrega)) {
+        $error = 'Debe seleccionar la nueva fecha estimada de entrega';
     } else {
         // Validar que si se completa la solicitud, debe haber archivo final O URL de drive
         if ($estado === ESTADO_COMPLETADA) {
@@ -112,6 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $params[] = $observaciones;
             }
 
+            if ($cambiar_fecha_entrega === '1' && !empty($nueva_fecha_estimada_entrega)) {
+                $update_fields[] = 'fecha_estimada_entrega = ?';
+                $params[] = $nueva_fecha_estimada_entrega;
+            }
+
             // Guardar URL de drive (puede estar vacía para eliminarla)
             if ($estado === ESTADO_COMPLETADA) {
                 $update_fields[] = 'url_drive = ?';
@@ -142,12 +151,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare($sql);
             $stmt->execute($params);
 
+            // Determinar texto de observación del historial según lo que cambió
+            $cambio_estado = ($estado_anterior !== $estado);
+            $cambio_fecha_entrega = ($cambiar_fecha_entrega === '1' && !empty($nueva_fecha_estimada_entrega));
+
+            if ($cambio_estado && $cambio_fecha_entrega) {
+                $obs_historial = $observaciones ?: 'Cambio de estado y de fecha estimada de entrega';
+            } elseif ($cambio_fecha_entrega) {
+                $obs_historial = 'Cambio de fecha estimada de entrega';
+            } elseif ($cambio_estado) {
+                $obs_historial = $observaciones ?: 'Cambio de estado';
+            } else {
+                $obs_historial = $observaciones ?: 'Actualización';
+            }
+
             // Registrar en historial
             $stmt = $conn->prepare("
                 INSERT INTO historial_estados (solicitud_id, estado_anterior, estado_nuevo, usuario_id, observacion)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $obs_historial = $observaciones ?: 'Cambio de estado';
             $stmt->execute([$id, $estado_anterior, $estado, $_SESSION['user_id'], $obs_historial]);
 
             // Notificar cambio de estado al usuario solicitante
@@ -273,6 +295,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label for="observaciones">Observaciones</label>
                         <textarea id="observaciones" name="observaciones" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group form-group-highlight" id="cambiar_fecha_entrega_block" style="<?php echo ($solicitud['estado'] ?? '') === 'En proceso' ? '' : 'display: none;'; ?>">
+                        <label>¿Necesita cambiar la fecha de entrega?</label>
+                        <div class="radio-group">
+                            <?php $cambiar_fecha_val = $_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['cambiar_fecha_entrega'] ?? '0') : '0'; ?>
+                            <label class="radio-label">
+                                <input type="radio" name="cambiar_fecha_entrega" value="0" <?php echo $cambiar_fecha_val === '0' ? 'checked' : ''; ?>> No
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="cambiar_fecha_entrega" value="1" <?php echo $cambiar_fecha_val === '1' ? 'checked' : ''; ?>> Sí
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="nueva_fecha_entrega_group" style="display: none;">
+                        <div class="form-row form-row-2cols">
+                            <div class="form-group">
+                                <label for="fecha_estimada_actual">Fecha estimada de entrega actual</label>
+                                <input type="text" id="fecha_estimada_actual" value="<?php echo htmlspecialchars(formatDate($solicitud['fecha_estimada_entrega'])); ?>" readonly class="input-readonly">
+                            </div>
+                            <div class="form-group">
+                                <label for="nueva_fecha_estimada_entrega">Nueva fecha estimada de entrega</label>
+                                <input type="date" id="nueva_fecha_estimada_entrega" name="nueva_fecha_estimada_entrega" value="<?php echo !empty($_POST['nueva_fecha_estimada_entrega']) ? htmlspecialchars($_POST['nueva_fecha_estimada_entrega']) : ''; ?>" min="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group" id="archivo_final_group" style="display: none;">
