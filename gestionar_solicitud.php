@@ -98,9 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update_fields = ['estado = ?'];
             $params = [$estado];
 
-            if ($prioridad_ajustada && $prioridad_ajustada !== $solicitud['prioridad']) {
+            if ($prioridad_ajustada !== '' && $prioridad_ajustada !== null && $prioridad_ajustada !== $solicitud['prioridad']) {
+                $update_fields[] = 'prioridad = ?';
                 $update_fields[] = 'prioridad_ajustada = ?';
                 $update_fields[] = 'justificacion_prioridad = ?';
+                $params[] = $prioridad_ajustada;
                 $params[] = $prioridad_ajustada;
                 $params[] = $justificacion;
             }
