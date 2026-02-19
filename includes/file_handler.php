@@ -42,10 +42,6 @@ class FileHandler {
             throw new Exception("El archivo excede el tamaño máximo permitido ({$tamaño_mb}MB)");
         }
 
-        if (!isset($file['type']) || !validarTipoArchivo($file['type'])) {
-            throw new Exception('Tipo de archivo no permitido');
-        }
-
         if (!isset($file['name']) || empty($file['name'])) {
             throw new Exception('Nombre de archivo no válido');
         }
@@ -55,16 +51,30 @@ class FileHandler {
         }
 
         $nombre_original = $file['name'];
-        $extension = getFileExtension($nombre_original);
-        
-        // Validar extensión real del archivo
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'psd', 'ai', 'eps', 'svg'];
-        if (!in_array(strtolower($extension), $allowedExtensions)) {
+        $extension = strtolower(getFileExtension($nombre_original));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'psd', 'ai', 'eps', 'svg', 'zip', 'rar'];
+
+        if (!in_array($extension, $allowedExtensions)) {
             throw new Exception('Extensión de archivo no permitida: ' . $extension);
         }
-        
-        // Validar contenido real del archivo (magic bytes)
-        $this->validateFileContent($file['tmp_name'], $extension);
+
+        // Para zip/rar: validar solo por extensión + magic bytes (el MIME suele venir mal en Windows)
+        $esArchivoComprimido = in_array($extension, ['zip', 'rar']);
+        if ($esArchivoComprimido) {
+            $this->validateFileContent($file['tmp_name'], $extension);
+        } else {
+            // Para el resto: exigir MIME permitido
+            if (!isset($file['type']) || !validarTipoArchivo($file['type'])) {
+                throw new Exception('Tipo de archivo no permitido');
+            }
+        }
+
+        $tipoMime = isset($file['type']) ? $file['type'] : 'application/octet-stream';
+        if ($extension === 'zip') {
+            $tipoMime = 'application/zip';
+        } elseif ($extension === 'rar') {
+            $tipoMime = 'application/x-rar-compressed';
+        }
         
         $nombre_archivo = $this->generateFileName($solicitud_id, $extension);
         $ruta_completa = UPLOAD_PATH . $nombre_archivo;
@@ -78,8 +88,8 @@ class FileHandler {
         $tamaño_comprimido = $tamaño_original;
 
         // Optimizar si es imagen y GD está disponible
-        if (in_array($file['type'], ALLOWED_IMAGE_TYPES) && extension_loaded('gd')) {
-            $tamaño_comprimido = $this->optimizeImage($ruta_completa, $file['type']);
+        if (in_array($tipoMime, ALLOWED_IMAGE_TYPES) && extension_loaded('gd')) {
+            $tamaño_comprimido = $this->optimizeImage($ruta_completa, $tipoMime);
         }
 
         // Guardar en base de datos
@@ -93,7 +103,7 @@ class FileHandler {
             $nombre_original,
             $nombre_archivo,
             $ruta_completa,
-            $file['type'],
+            $tipoMime,
             $tamaño_original,
             $tamaño_comprimido
         ]);
@@ -248,7 +258,8 @@ class FileHandler {
             'png' => ["\x89\x50\x4E\x47"],
             'gif' => ["\x47\x49\x46\x38"],
             'pdf' => ["%PDF"],
-            'zip' => ["\x50\x4B\x03\x04"], // Para docx, que son ZIP
+            'zip' => ["\x50\x4B\x03\x04", "\x50\x4B\x05\x06", "\x50\x4B\x07\x08"],
+            'rar' => ["Rar!\x1A\x07"],
         ];
 
         $ext = strtolower($extension);

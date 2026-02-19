@@ -56,6 +56,7 @@ define('UPLOAD_URL', BASE_URL . 'uploads/');
 define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
 define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 define('ALLOWED_DOC_TYPES', ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']);
+define('ALLOWED_ARCHIVE_TYPES', ['application/zip', 'application/x-zip-compressed', 'application/vnd.rar', 'application/x-rar-compressed', 'application/x-rar']);
 
 // Configuración de compresión de imágenes
 define('IMAGE_QUALITY', 85);

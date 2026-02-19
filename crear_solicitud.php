@@ -185,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="">Seleccione...</option>
                         <option value="Uso interno">Uso interno</option>
                         <option value="Uso externo">Uso externo</option>
+                        <option value="Uso mixto">Uso mixto</option>
                     </select>
                 </div>
 
@@ -218,8 +219,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="form-group">
                     <label for="archivo">Seleccionar Archivos</label>
-                    <input type="file" id="archivo" name="archivo[]" multiple accept="image/*,.pdf,.doc,.docx">
-                    <small class="form-help">Formatos permitidos: JPG, PNG, GIF, WEBP, PDF, DOC, DOCX. Máximo 10MB por archivo.</small>
+                    <input type="file" id="archivo" name="archivo[]" multiple accept="image/*,.pdf,.doc,.docx,.zip,.rar">
+                    <small class="form-help">Formatos permitidos: JPG, PNG, GIF, WEBP, PDF, DOC, DOCX, ZIP, RAR. Máximo 10MB por archivo.</small>
                 </div>
             </div>
 

@@ -133,9 +133,21 @@ function calcularHoras($fecha1, $fecha2) {
 /**
  * Validar formato de archivo
  */
-function validarTipoArchivo($tipo) {
-    $tiposPermitidos = array_merge(ALLOWED_IMAGE_TYPES, ALLOWED_DOC_TYPES);
+/*function validarTipoArchivo($tipo) {
+    $tiposPermitidos = array_merge(ALLOWED_IMAGE_TYPES, ALLOWED_DOC_TYPES, ALLOWED_ARCHIVE_TYPES);
     return in_array($tipo, $tiposPermitidos);
+}*/
+function validarTipoArchivo($tipo) {
+    $permitidos = [
+        'image/png',
+        'image/jpeg',
+        'application/pdf',
+        'application/zip',
+        'application/x-zip-compressed',
+        'application/x-rar-compressed'
+    ];
+
+    return in_array($tipo, $permitidos);
 }
 
 /**
