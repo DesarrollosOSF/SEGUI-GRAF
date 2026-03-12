@@ -209,6 +209,17 @@ body {
     font-size: 0.8125rem;
 }
 
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--bg-color);
+    border-color: var(--secondary-color);
+}
+
 .btn-block {
     display: block;
     width: 100%;
@@ -412,15 +423,15 @@ body {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Reducido de 180px */
-    gap: 0.875rem; /* Reducido de 1.25rem */
-    margin-bottom: 1.25rem; /* Reducido de 1.5rem */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.875rem;
+    margin-bottom: 1.25rem;
 }
 
-/* En pantallas grandes, más columnas */
+/* En pantallas grandes, hasta 6 columnas para que todas las tarjetas queden en una sola línea */
 @media (min-width: 1200px) {
     .stats-grid {
-        grid-template-columns: repeat(5, 1fr); /* Aumentado a 5 para aprovechar mejor el espacio */
+        grid-template-columns: repeat(6, minmax(0, 1fr));
     }
 }
 
@@ -886,6 +897,11 @@ body {
 .prioridad-baja {
     background-color: #d1fae5;
     color: #065f46;
+}
+
+.badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
 }
 
 .estado-recibido {
@@ -1451,4 +1467,190 @@ body {
         display: block;
     }
 }
+
+/* Control de Publicaciones - Calendario */
+.calendario-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.calendario-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.calendario-fila {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+}
+
+.cal-dia-semana {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.cal-dia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text-color);
+    background: var(--bg-color);
+    transition: background 0.2s;
+}
+
+.cal-dia:hover {
+    background: var(--border-color);
+}
+
+.cal-dia-con-pub {
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.cal-dia-con-pub:hover {
+    background: #bfdbfe;
+}
+
+.cal-dia-activo {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
+.cal-dia.cal-vacio {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.link-plataforma {
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--primary-color);
+}
+
+.link-plataforma:hover {
+    text-decoration: underline;
+}
+
+.plataformas-links {
+    max-width: 320px;
+}
+
+.form-row-plataforma {
+    margin-bottom: 0.75rem;
+}
+
+/* Modales */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.modal-overlay.modal-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 1rem;
+}
+
+@media (min-width: 600px) {
+    .modal-content {
+        max-width: 560px;
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0 0.25rem;
+}
+
+.modal-close:hover {
+    color: var(--text-color);
+}
+
+.modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Lista de enlaces almacenados (form publicación) */
+.lista-enlaces-plataformas {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.lista-enlaces-plataformas li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-color);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+}
+
+.lista-enlaces-plataformas li .enlace-plat-nombre { font-weight: 500; }
+.lista-enlaces-plataformas li .enlace-plat-url { font-size: 0.8125rem; color: var(--text-muted); margin-left: 0.5rem; }
+.lista-enlaces-plataformas li .btn-remove-enlace { margin-left: 0.5rem; }
 

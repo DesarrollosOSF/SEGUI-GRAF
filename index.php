@@ -124,6 +124,7 @@ if (isAdmin()) {
         'pendientes' => $conn->query("SELECT COUNT(*) FROM solicitudes WHERE estado = 'Pendiente de aprobación'")->fetchColumn(),
         'en_proceso' => $conn->query("SELECT COUNT(*) FROM solicitudes WHERE estado = 'En proceso'")->fetchColumn(),
         'completadas' => $conn->query("SELECT COUNT(*) FROM solicitudes WHERE estado = 'Completada'")->fetchColumn(),
+        'canceladas' => $conn->query("SELECT COUNT(*) FROM solicitudes WHERE estado = 'Cancelada'")->fetchColumn(),
     ];
 } else {
     $stmt = $conn->prepare("SELECT COUNT(*) FROM solicitudes WHERE usuario_id = ?");
@@ -145,6 +146,10 @@ if (isAdmin()) {
     $stmt = $conn->prepare("SELECT COUNT(*) FROM solicitudes WHERE usuario_id = ? AND estado = 'Completada'");
     $stmt->execute([$user_id]);
     $stats['completadas'] = $stmt->fetchColumn();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM solicitudes WHERE usuario_id = ? AND estado = 'Cancelada'");
+    $stmt->execute([$user_id]);
+    $stats['canceladas'] = $stmt->fetchColumn();
 }
 
 $page_title = isAdmin() ? 'Tablero de Gestión' : 'Mis Solicitudes';
@@ -196,6 +201,12 @@ $page_title = isAdmin() ? 'Tablero de Gestión' : 'Mis Solicitudes';
                 <div class="stat-value"><?php echo $stats['completadas']; ?></div>
                 <div class="stat-label">Completadas</div>
             </div>
+            <?php if (isset($stats['canceladas'])): ?>
+            <div class="stat-card" style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-left: 4px solid #dc2626;">
+                <div class="stat-value"><?php echo $stats['canceladas']; ?></div>
+                <div class="stat-label">Canceladas</div>
+            </div>
+            <?php endif; ?>
         </div>
 
         <!-- Búsqueda y Filtros -->
