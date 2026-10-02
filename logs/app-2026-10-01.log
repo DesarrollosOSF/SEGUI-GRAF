@@ -1,0 +1,17 @@
+[2026-10-01 12:15:12] [INFO] Login exitoso {"usuario":"AprendizSena"}
+[2026-10-01 14:06:03] [INFO] Login exitoso {"usuario":"Yessica Martinez"}
+[2026-10-01 14:07:21] [INFO] AUDIT: Crear solicitud by user_id: 30 {"type":"audit","accion":"nueva_solicitud"}
+[2026-10-01 14:07:21] [INFO] Solicitud creada {"solicitud_id":"448","usuario":30,"titulo":"Haciedo pruebas"}
+[2026-10-01 14:21:42] [INFO] AUDIT: Agregar comentario by user_id: 30 {"type":"audit","solicitud_id":"448","comentario_id":"106"}
+[2026-10-01 14:23:25] [INFO] AUDIT: Gestionar solicitud by user_id: 29 {"type":"audit","solicitud_id":"448","accion":"actualizar_estado"}
+[2026-10-01 14:23:25] [INFO] Solicitud actualizada {"solicitud_id":"448","estado_anterior":"Recibido","estado_nuevo":"En proceso","usuario":29}
+[2026-10-01 14:56:53] [INFO] AUDIT: Gestionar solicitud by user_id: 29 {"type":"audit","solicitud_id":"448","accion":"actualizar_estado"}
+[2026-10-01 14:56:53] [INFO] Solicitud actualizada {"solicitud_id":"448","estado_anterior":"En proceso","estado_nuevo":"Pendiente de aprobaci\u00f3n","usuario":29}
+[2026-10-01 15:15:27] [INFO] AUDIT: Agregar comentario by user_id: 30 {"type":"audit","solicitud_id":"448","comentario_id":"107"}
+[2026-10-01 15:19:26] [INFO] AUDIT: Gestionar solicitud by user_id: 29 {"type":"audit","solicitud_id":"448","accion":"actualizar_estado"}
+[2026-10-01 15:27:41] [WARNING] Intento de login fallido {"usuario":"admin"}
+[2026-10-01 15:28:03] [WARNING] Intento de login fallido {"usuario":"admin"}
+[2026-10-01 15:28:08] [WARNING] Intento de login fallido {"usuario":"admin"}
+[2026-10-01 15:28:56] [INFO] Login exitoso {"usuario":"admin"}
+[2026-10-01 16:18:54] [INFO] AUDIT: Gestionar solicitud by user_id: 29 {"type":"audit","solicitud_id":"448","accion":"actualizar_estado"}
+[2026-10-01 16:18:54] [INFO] Solicitud actualizada {"solicitud_id":"448","estado_anterior":"Pendiente de aprobaci\u00f3n","estado_nuevo":"Completada","usuario":29}
